@@ -89,7 +89,7 @@ struct ContentView: View {
                             Spacer()
                         }
                     }
-                    .onChange(of: selectedPickerItem) { newItem in
+                    .onChange(of: selectedPickerItem, perform: { newItem in
                         Task {
                             if let data = try? await newItem?.loadTransferable(type: Data.self),
                                let uiImage = UIImage(data: data) {
@@ -98,7 +98,7 @@ struct ContentView: View {
                                 }
                             }
                         }
-                    }
+                    })
                 }
 
                 // Seção: Frequência e Intervalo
@@ -193,11 +193,5 @@ struct ContentView: View {
                 }
             }
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }
