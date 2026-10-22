@@ -32,13 +32,15 @@ jobs:
             -archivePath ./build/App.xcarchive \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" 2>&1 | tee archive.log || (echo "=== ARCHIVE LOG TAIL ===" && tail -n 80 archive.log && exit 1)
+            CODE_SIGN_IDENTITY=""
 
       - name: Package into IPA
         run: |
           cd iOSCustomNotifier
           mkdir -p Payload
-          cp -r ./build/App.xcarchive/Products/Applications/*.app Payload/
+          APP_PATH=$(find build -name "*.app" -type d | head -n 1)
+          echo "Found app: $APP_PATH"
+          cp -r "$APP_PATH" Payload/
           zip -r NotificadorCustom.ipa Payload
 
       - name: Upload IPA Artifact
