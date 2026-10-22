@@ -6,11 +6,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-ipa:
+  build-unsigned-ipa:
+    name: Build Unsigned IPA for iPhone
     runs-on: macos-14
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Install xcodegen
@@ -21,30 +22,30 @@ jobs:
           cd iOSCustomNotifier
           xcodegen generate
 
-      - name: Build Application with Xcode
+      - name: Build Archive (Unsigned)
         run: |
           cd iOSCustomNotifier
-          mkdir -p build
-          xcodebuild clean build \
+          xcodebuild archive \
             -project iOSCustomNotifier.xcodeproj \
             -scheme iOSCustomNotifier \
             -configuration Release \
             -sdk iphoneos \
-            CONFIGURATION_BUILD_DIR="$(pwd)/build" \
-            CODE_SIGN_STYLE="Manual" \
-            CODE_SIGNING_ALLOWED="NO" \
-            CODE_SIGNING_REQUIRED="NO" \
+            -destination "generic/platform=iOS" \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY=""
 
-      - name: Package into IPA
+      - name: Generate Unsigned IPA
         run: |
-          cd iOSCustomNotifier
-          mkdir -p Payload
-          cp -r build/iOSCustomNotifier.app Payload/
-          zip -r NotificadorCustom.ipa Payload
+          mkdir -p "$RUNNER_TEMP/Payload"
+          cp -r "$RUNNER_TEMP/App.xcarchive/Products/Applications/"*.app "$RUNNER_TEMP/Payload/"
+          cd "$RUNNER_TEMP"
+          zip -r "NotificadorCustom.ipa" Payload
+          mv NotificadorCustom.ipa "$GITHUB_WORKSPACE/NotificadorCustom.ipa"
 
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v4
         with:
           name: NotificadorCustom-ipa
-          path: iOSCustomNotifier/NotificadorCustom.ipa
+          path: NotificadorCustom.ipa
