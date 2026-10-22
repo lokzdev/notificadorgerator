@@ -25,7 +25,7 @@ jobs:
         run: |
           cd iOSCustomNotifier
           mkdir -p build
-          xcodebuild \
+          xcodebuild clean build \
             -project iOSCustomNotifier.xcodeproj \
             -scheme iOSCustomNotifier \
             -configuration Release \
@@ -47,3 +47,10 @@ jobs:
         with:
           name: NotificadorCustom-ipa
           path: iOSCustomNotifier/NotificadorCustom.ipa
+
+      - name: Upload Build Log on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcodebuild-failure-log
+          path: iOSCustomNotifier/build.log

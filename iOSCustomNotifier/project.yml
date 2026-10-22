@@ -15,12 +15,14 @@ targets:
     deploymentTarget: "16.0"
     sources:
       - path: iOSCustomNotifier
+        excludes:
+          - "Info.plist"
     settings:
       base:
         SWIFT_VERSION: "5.0"
         PRODUCT_BUNDLE_IDENTIFIER: com.customnotif.app
         INFOPLIST_FILE: iOSCustomNotifier/Info.plist
-        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_IDENTITY: ""
         CODE_SIGNING_REQUIRED: NO
-        CODE_SIGNING_ALLOWED: YES
+        CODE_SIGNING_ALLOWED: NO
         DEVELOPMENT_TEAM: ""
