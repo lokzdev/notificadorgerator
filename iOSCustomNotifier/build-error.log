@@ -1,0 +1,19 @@
+EXIT CODE: 74
+Command line invocation:
+    /Applications/Xcode_15.4.app/Contents/Developer/usr/bin/xcodebuild archive -project iOSCustomNotifier.xcodeproj -scheme iOSCustomNotifier -configuration Release -sdk iphoneos -destination generic/platform=iOS -archivePath /Users/runner/work/_temp/App.xcarchive CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=
+
+User defaults from command line:
+    IDEArchivePathOverride = /Users/runner/work/_temp/App.xcarchive
+    IDEPackageSupportUseBuiltinSCM = YES
+
+Build settings from command line:
+    CODE_SIGN_IDENTITY = 
+    CODE_SIGNING_ALLOWED = NO
+    CODE_SIGNING_REQUIRED = NO
+    SDKROOT = iphoneos17.5
+
+2026-10-22 23:27:23.143 xcodebuild[1655:7929] Writing error result bundle to /var/folders/s6/5hzmn6lx4dz5nxs7k_0slzph0000gn/T/ResultBundle_2026-22-10_23-27-0023.xcresult
+xcodebuild: error: Unable to read project 'iOSCustomNotifier.xcodeproj'.
+	Reason: The project ‘iOSCustomNotifier’ cannot be opened because it is in a future Xcode project file format (77). Adjust the project format using a compatible version of Xcode to allow it to be opened by this version of Xcode.
+
+
