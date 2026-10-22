@@ -1,0 +1,48 @@
+name: Build iOS IPA
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-ipa:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Generate Xcode Project
+        run: |
+          cd iOSCustomNotifier
+          xcodegen generate
+
+      - name: Build Application with Xcode
+        run: |
+          cd iOSCustomNotifier
+          xcodebuild build \
+            -project iOSCustomNotifier.xcodeproj \
+            -scheme iOSCustomNotifier \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
+
+      - name: Package into IPA
+        run: |
+          cd iOSCustomNotifier
+          mkdir -p Payload
+          cp -r build/Build/Products/Release-iphoneos/iOSCustomNotifier.app Payload/
+          zip -r NotificadorCustom.ipa Payload
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NotificadorCustom-ipa
+          path: iOSCustomNotifier/NotificadorCustom.ipa

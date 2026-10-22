@@ -1,0 +1,9 @@
+# Build caches & binaries
+.gradle/
+build/
+*/build/
+local.properties
+*.apk
+*.ipa
+.DS_Store
+DerivedData/

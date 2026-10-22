@@ -1,0 +1,20 @@
+name: iOSCustomNotifier
+options:
+  bundleIdPrefix: com.customnotif
+  deploymentTarget:
+    iOS: "16.0"
+
+targets:
+  iOSCustomNotifier:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - iOSCustomNotifier
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.customnotif.app
+        INFOPLIST_FILE: iOSCustomNotifier/Info.plist
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGN_IDENTITY: ""
