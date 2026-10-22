@@ -5,6 +5,9 @@ on:
     branches: [ "main", "master" ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-unsigned-ipa:
     name: Build Unsigned IPA for iPhone
@@ -43,11 +46,17 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" > build.log 2>&1
           EXIT_CODE=$?
-          echo "### Xcodebuild Output (Exit Code: $EXIT_CODE)" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          tail -n 60 build.log >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          tail -n 60 build.log
+          
+          # Salva o log no branch build-logs para inspeção imediata
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git checkout -B build-logs
+          echo "EXIT CODE: $EXIT_CODE" > build-error.log
+          cat build.log >> build-error.log
+          git add -f build-error.log
+          git commit -m "Upload build log" || true
+          git push -f origin build-logs || true
+          
           exit $EXIT_CODE
 
       - name: Generate Unsigned IPA
