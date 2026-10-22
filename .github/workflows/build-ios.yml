@@ -24,21 +24,24 @@ jobs:
       - name: Build Application with Xcode
         run: |
           cd iOSCustomNotifier
-          xcodebuild build \
+          xcodebuild clean build \
             -project iOSCustomNotifier.xcodeproj \
             -scheme iOSCustomNotifier \
             -configuration Release \
-            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
             -derivedDataPath build \
-            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="-" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY=""
+            CODE_SIGNING_ALLOWED=YES
 
       - name: Package into IPA
         run: |
           cd iOSCustomNotifier
           mkdir -p Payload
-          cp -r build/Build/Products/Release-iphoneos/iOSCustomNotifier.app Payload/
+          # Copia o binário compilado .app para a pasta Payload
+          APP_PATH=$(find build/Build/Products/Release-iphoneos -name "*.app" -type d | head -n 1)
+          echo "Found app at: $APP_PATH"
+          cp -r "$APP_PATH" Payload/
           zip -r NotificadorCustom.ipa Payload
 
       - name: Upload IPA Artifact

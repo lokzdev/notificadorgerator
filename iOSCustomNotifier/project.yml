@@ -10,11 +10,12 @@ targets:
     platform: iOS
     deploymentTarget: "16.0"
     sources:
-      - iOSCustomNotifier
+      - path: iOSCustomNotifier
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.customnotif.app
         INFOPLIST_FILE: iOSCustomNotifier/Info.plist
-        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGN_IDENTITY: "-"
         CODE_SIGNING_REQUIRED: NO
-        CODE_SIGN_IDENTITY: ""
+        CODE_SIGNING_ALLOWED: YES
+        DEVELOPMENT_TEAM: ""
